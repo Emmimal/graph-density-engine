@@ -90,30 +90,55 @@ Density sweep used throughout the published results: `[0.2, 0.4, 0.6, 0.8, 1.0]`
 ## Project Structure
 
 ```
-graph-density-engine/
-├── state.py, context.py, agent_output.py   # Core dataclasses
+relationship_density/
+├── state.py, context.py, agent_output.py       # Core dataclasses
 ├── agents/
-│   ├── dummy.py                            # Trivial agent for infrastructure validation
-│   └── policy.py                           # PureAgent — deterministic novelty-seeking policy
+│   ├── __init__.py
+│   ├── base.py                                 # Agent interface/base class
+│   ├── dummy.py                                 # Trivial agent for infrastructure validation
+│   └── policy.py                                # PureAgent — deterministic novelty-seeking policy
 ├── graph/
-│   ├── topology.py                         # Connected Erdos-Renyi generator
-│   ├── router.py                           # Edge selection
-│   ├── telemetry.py                        # Per-trial recording
-│   └── engine.py                           # Orchestrates one trial end to end
+│   ├── __init__.py
+│   ├── budget.py                                # Message-budget tracking
+│   ├── topology.py                              # Connected Erdos-Renyi generator
+│   ├── router.py                                # Edge selection
+│   ├── telemetry.py                             # Per-trial recording
+│   └── engine.py                                # Orchestrates one trial end to end
 ├── metrics/
-│   ├── tfidf.py                            # From-scratch TF-IDF vectorizer + cosine similarity
-│   ├── relationship_efficiency.py
+│   ├── __init__.py
+│   ├── base.py                                  # Shared metric interface
+│   ├── tfidf.py                                 # From-scratch TF-IDF vectorizer + cosine similarity
 │   ├── tfidf_redundancy.py
+│   ├── relationship_efficiency.py
 │   ├── information_gain.py
 │   ├── edge_utilization.py
-│   └── outcome/                            # task_success.py, information_recovery.py, ...
+│   ├── communication_depth.py
+│   ├── state_size.py
+│   └── outcome/
+│       ├── __init__.py
+│       ├── information_recovery.py
+│       ├── task_success.py
+│       ├── latency.py
+│       └── token_cost.py
 ├── datasets/
-│   ├── generate_datasets.py                # Builds the frozen incident_01..10.json corpus
-│   └── loader.py
-├── tests/                                  # 16-test Phase 0 + reproducibility suite
-├── run_phase1.py, run_phase2.py, run_experiment2.py
-├── experiment.md                           # Frozen pre-registration protocol
-└── interfaces.md                           # Frozen interface contracts
+│   ├── __init__.py
+│   ├── generate_datasets.py                     # Builds the frozen incident_01..10.json corpus
+│   ├── loader.py
+│   └── incident_01.json … incident_10.json
+├── tests/                                       # 6 files, 16 tests — Phase 0 + reproducibility suite
+│   ├── __init__.py
+│   ├── test_topology.py
+│   ├── test_edge_utilization.py
+│   ├── test_information_gain.py
+│   ├── test_relationship_efficiency.py
+│   ├── test_tfidf_redundancy.py
+│   └── test_reproducibility.py
+├── run_phase1.py, run_phase2.py
+├── phase2_results.json
+├── experiment.md                                # Frozen pre-registration protocol
+├── interfaces.md                                # Frozen interface contracts
+├── README.md
+└── requirements.txt
 ```
 
 ## Performance (CPU only, zero API calls)
