@@ -67,7 +67,7 @@ Four phases, run in order, each validating the one before it:
 | 0 | `python -m pytest tests/ -v` | 16 unit tests validating every metric against synthetic examples, plus same-seed/different-seed reproducibility checks |
 | 1 | `python run_phase1.py` | Graph engine sanity check across the full density sweep, using a trivial `DummyAgent` — infrastructure only, no behavioral claim |
 | 2 | `python run_phase2.py --trials 10 --out results.json` | The real experiment: 50 runs (5 density levels × 10 trials) with the deterministic `PureAgent` |
-| 2b | `python run_experiment2.py --trials 10 --out results2.json` | A separately pre-registered follow-up under a constrained communication budget |
+
 
 > **Note:** Phase 2b requires `run_experiment2.py`, which isn't yet present in the repository's root file listing as of this writing. Push it before publishing this table, or remove the row until it is.
 
