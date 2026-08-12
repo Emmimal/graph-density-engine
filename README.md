@@ -90,7 +90,7 @@ Density sweep used throughout the published results: `[0.2, 0.4, 0.6, 0.8, 1.0]`
 ## Project Structure
 
 ```
-relationship_density/
+graph_density_engine/
 ├── state.py, context.py, agent_output.py       # Core dataclasses
 ├── agents/
 │   ├── __init__.py
