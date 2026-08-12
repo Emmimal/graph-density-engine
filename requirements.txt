@@ -1,0 +1,7 @@
+# Zero external dependencies for the codebase itself (stdlib only —
+# see agents/llm.py, which calls the Anthropic API via urllib rather
+# than the anthropic SDK, and metrics/tfidf.py, a from-scratch TF-IDF
+# implementation with no numpy/scikit-learn).
+#
+# pytest is a dev-only dependency for running Phase 0 / Phase 1.5 tests.
+pytest>=7.0
