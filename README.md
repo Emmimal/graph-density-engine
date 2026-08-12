@@ -39,9 +39,9 @@ No other dependencies, at any stage. The graph engine, agent policy, and every m
 ## Quick Start
 
 ```python
-from graph-density-engine.agents.policy import PureAgent
-from graph-density-engine.datasets.loader import DatasetLoader
-from graph-density-engine.graph.engine import Engine
+from agents.policy import PureAgent
+from datasets.loader import DatasetLoader
+from graph.engine import Engine
 
 loader = DatasetLoader()
 scenario = loader.load("incident_01")
