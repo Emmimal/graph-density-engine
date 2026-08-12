@@ -1,5 +1,4 @@
-# graph_density_engine
-
+# graph-density-engine
 A pure-Python, zero-dependency framework for testing how communication topology affects multi-agent LLM systems — Erdős–Rényi graph generation, deterministic agent policies, and reproducible density sweeps in one pipeline.
 
 ![Python Version](https://img.shields.io/badge/python-3.12-blue) ![License](https://img.shields.io/badge/license-MIT-green)
@@ -40,9 +39,9 @@ No other dependencies, at any stage. The graph engine, agent policy, and every m
 ## Quick Start
 
 ```python
-from graph_density_engine.agents.policy import PureAgent
-from graph_density_engine.datasets.loader import DatasetLoader
-from graph_density_engine.graph.engine import Engine
+from graph-density-engine.agents.policy import PureAgent
+from graph-density-engine.datasets.loader import DatasetLoader
+from graph-density-engine.graph.engine import Engine
 
 loader = DatasetLoader()
 scenario = loader.load("incident_01")
@@ -90,7 +89,7 @@ Density sweep used throughout the published results: `[0.2, 0.4, 0.6, 0.8, 1.0]`
 ## Project Structure
 
 ```
-graph_density_engine/
+graph-density-engine/
 ├── state.py, context.py, agent_output.py       # Core dataclasses
 ├── agents/
 │   ├── __init__.py
