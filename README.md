@@ -1,5 +1,6 @@
 # graph-density-engine
-A pure-Python, zero-dependency framework for testing how communication topology affects multi-agent LLM systems — Erdős–Rényi graph generation, deterministic agent policies, and reproducible density sweeps in one pipeline.
+
+A pure-Python, zero-dependency framework for testing how communication topology affects multi-agent communication systems — Erdős–Rényi graph generation, deterministic agent policies, and reproducible density sweeps in one pipeline.
 
 ![Python Version](https://img.shields.io/badge/python-3.12-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -55,6 +56,8 @@ print(record.diagnostic_metrics["tfidf_redundancy"])
 print(record.final_facts)
 ```
 
+Run this from the repository root — the package layout puts `agents/`, `graph/`, `datasets/`, and `metrics/` directly at the top level, with no wrapping package directory.
+
 ## Running the Experiment
 
 Four phases, run in order, each validating the one before it:
@@ -65,6 +68,8 @@ Four phases, run in order, each validating the one before it:
 | 1 | `python run_phase1.py` | Graph engine sanity check across the full density sweep, using a trivial `DummyAgent` — infrastructure only, no behavioral claim |
 | 2 | `python run_phase2.py --trials 10 --out results.json` | The real experiment: 50 runs (5 density levels × 10 trials) with the deterministic `PureAgent` |
 | 2b | `python run_experiment2.py --trials 10 --out results2.json` | A separately pre-registered follow-up under a constrained communication budget |
+
+> **Note:** Phase 2b requires `run_experiment2.py`, which isn't yet present in the repository's root file listing as of this writing. Push it before publishing this table, or remove the row until it is.
 
 ## Configuration Reference
 
@@ -94,8 +99,8 @@ graph-density-engine/
 ├── agents/
 │   ├── __init__.py
 │   ├── base.py                                 # Agent interface/base class
-│   ├── dummy.py                                 # Trivial agent for infrastructure validation
-│   └── policy.py                                # PureAgent — deterministic novelty-seeking policy
+│   ├── dummy.py                                # Trivial agent for infrastructure validation
+│   └── policy.py                               # PureAgent — deterministic novelty-seeking policy
 ├── graph/
 │   ├── __init__.py
 │   ├── budget.py                                # Message-budget tracking
@@ -146,10 +151,10 @@ graph-density-engine/
 |---|---|
 | Phase 0 — 16 unit tests | under 0.25s |
 | Phase 1 — 50 runs, DummyAgent | under 1s |
-| Phase 2 — 50 runs, PureAgent | ~0.70s |
+| Phase 2 — 50 runs, PureAgent | near-instant (not separately benchmarked) |
 | API cost, any phase | $0 |
 
-Every number above was actually measured, not estimated — reproduced independently across two machines and two operating systems with identical results to three decimal places.
+Phase 0 and Phase 1 timings above are measured on this machine; Phase 2 has not been separately benchmarked, and multi-machine/multi-OS reproducibility has not been independently verified. What's confirmed: the graph engine and agent policy are fully deterministic given a fixed seed (see `tests/test_reproducibility.py`), and every trial in the published sweep completed without a timeout.
 
 ## When to Use This
 
@@ -170,3 +175,7 @@ Skip it if you:
 - Information Recovery uses keyword-overlap matching, not semantic similarity — a documented, deliberate trade-off for staying dependency-free.
 - The included dataset corpus rotates 3 incident templates across 10 scenario files.
 - The default 35-message communication budget is generous relative to the included 17-fact scenarios, producing a ceiling effect — see `experiment.md` §12 for the full amendment history, including a bug that was found and fixed in the Information Recovery threshold and in an earlier circular stopping condition.
+
+## About
+
+A pure-Python, zero-dependency framework for testing how communication topology affects multi-agent communication systems — Erdős–Rényi graph generation, deterministic agent policies, and reproducible density sweeps in one pipeline.
