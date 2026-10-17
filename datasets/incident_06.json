@@ -1,0 +1,66 @@
+{
+  "scenario_id": "incident_06",
+  "theme": "DNS resolution failure after provider migration",
+  "service": "notification-service",
+  "per_agent_knowledge": {
+    "0": [
+      "Queued notifications were replayed starting 04:10 UTC.",
+      "The DNS migration runbook has caused two prior partial outages from incomplete service inventories.",
+      "Generate the DNS migration service inventory automatically from service-discovery records instead of a manually maintained list."
+    ],
+    "1": [
+      "Diff the automated service inventory against the manual one used in this migration, and confirm zero discrepancies before the next migration phase.",
+      "Approximately 190,000 notifications were queued and delayed."
+    ],
+    "2": [
+      "DNS query logs show NXDOMAIN responses for auth-service.internal starting 03:12 UTC.",
+      "100% of push and email notifications failed to send between 03:12 and 04:05 UTC."
+    ],
+    "3": [
+      "03:00 UTC: DNS provider migration begins.",
+      "notification-service depends on auth-service to validate delivery tokens."
+    ],
+    "4": [
+      "auth-service's internal hostname is resolved via the internal DNS zone.",
+      "04:05 UTC: missing DNS record is manually added and propagates."
+    ],
+    "5": [
+      "A DNS provider migration left an internal service record unmigrated, causing notification-service to fail resolving auth-service's internal hostname.",
+      "user-service, which also calls auth-service, was unaffected because it caches DNS results for 30 minutes."
+    ],
+    "6": [
+      "notification-service error logs show 'failed to resolve host' beginning 03:12 UTC.",
+      "03:12 UTC: notification-service begins failing DNS resolution."
+    ],
+    "7": [
+      "The DNS migration runbook's service inventory did not include auth-service.internal.",
+      "The missing DNS record was manually added to the new provider at 03:58 UTC."
+    ]
+  },
+  "expected_facts": [
+    "A DNS provider migration left an internal service record unmigrated, causing notification-service to fail resolving auth-service's internal hostname.",
+    "DNS query logs show NXDOMAIN responses for auth-service.internal starting 03:12 UTC.",
+    "The DNS migration runbook's service inventory did not include auth-service.internal.",
+    "notification-service error logs show 'failed to resolve host' beginning 03:12 UTC.",
+    "100% of push and email notifications failed to send between 03:12 and 04:05 UTC.",
+    "Approximately 190,000 notifications were queued and delayed.",
+    "user-service, which also calls auth-service, was unaffected because it caches DNS results for 30 minutes.",
+    "03:00 UTC: DNS provider migration begins.",
+    "03:12 UTC: notification-service begins failing DNS resolution.",
+    "04:05 UTC: missing DNS record is manually added and propagates.",
+    "notification-service depends on auth-service to validate delivery tokens.",
+    "auth-service's internal hostname is resolved via the internal DNS zone.",
+    "The missing DNS record was manually added to the new provider at 03:58 UTC.",
+    "Queued notifications were replayed starting 04:10 UTC.",
+    "The DNS migration runbook has caused two prior partial outages from incomplete service inventories.",
+    "Generate the DNS migration service inventory automatically from service-discovery records instead of a manually maintained list.",
+    "Diff the automated service inventory against the manual one used in this migration, and confirm zero discrepancies before the next migration phase."
+  ],
+  "ground_truth_sections": {
+    "root_cause": "A DNS provider migration left an internal service record unmigrated, causing notification-service to fail resolving auth-service's internal hostname.",
+    "evidence": "DNS query logs show NXDOMAIN responses for auth-service.internal starting 03:12 UTC. The DNS migration runbook's service inventory did not include auth-service.internal. notification-service error logs show 'failed to resolve host' beginning 03:12 UTC.",
+    "impact": "100% of push and email notifications failed to send between 03:12 and 04:05 UTC. Approximately 190,000 notifications were queued and delayed. user-service, which also calls auth-service, was unaffected because it caches DNS results for 30 minutes.",
+    "fix": "Generate the DNS migration service inventory automatically from service-discovery records instead of a manually maintained list.",
+    "verification_plan": "Diff the automated service inventory against the manual one used in this migration, and confirm zero discrepancies before the next migration phase."
+  }
+}

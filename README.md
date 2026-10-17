@@ -69,7 +69,6 @@ Four phases, run in order, each validating the one before it:
 | 2 | `python run_phase2.py --trials 10 --out results.json` | The real experiment: 50 runs (5 density levels × 10 trials) with the deterministic `PureAgent` |
 
 
-> **Note:** Phase 2b requires `run_experiment2.py`, which isn't yet present in the repository's root file listing as of this writing. Push it before publishing this table, or remove the row until it is.
 
 ## Configuration Reference
 

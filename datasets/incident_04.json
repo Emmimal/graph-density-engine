@@ -1,0 +1,66 @@
+{
+  "scenario_id": "incident_04",
+  "theme": "database connection pool exhaustion",
+  "service": "checkout-service",
+  "per_agent_knowledge": {
+    "0": [
+      "Checkout success rate dropped from 99.2% to 61% between 14:03 and 14:47 UTC.",
+      "Downstream payment-service saw a 3x retry-storm from checkout-service.",
+      "Restore max_connections to a value load-tested for peak traffic, and add a pre-deploy config diff check for connection-pool settings."
+    ],
+    "1": [
+      "Connection pool metrics show saturation at 20/20 starting 14:03 UTC.",
+      "max_connections was restored to 100 in the rollback."
+    ],
+    "2": [
+      "checkout-service depends on payment-service for authorization.",
+      "14:03 UTC: connection pool saturation begins."
+    ],
+    "3": [
+      "The same max_connections misconfiguration caused a smaller incident on a staging deploy two weeks earlier.",
+      "On-call rolled back checkout-service to v2.13.2 at 14:44 UTC."
+    ],
+    "4": [
+      "14:47 UTC: rollback to v2.13.2 completes and pool saturation clears.",
+      "14:00 UTC: deploy of checkout-service v2.14.0 begins."
+    ],
+    "5": [
+      "Error logs show 'connection pool exhausted' first at 14:04 UTC.",
+      "Re-run peak-traffic load test against the restored config, and add an alert on connection-pool saturation above 90% for two release cycles."
+    ],
+    "6": [
+      "Approximately 8,400 checkout attempts failed during the incident window.",
+      "The config diff for the 14:00 UTC deploy shows max_connections changed from 100 to 20."
+    ],
+    "7": [
+      "The checkout-service database connection pool was exhausted after a deploy reduced max connections from 100 to 20.",
+      "checkout-service depends on inventory-service for stock holds."
+    ]
+  },
+  "expected_facts": [
+    "The checkout-service database connection pool was exhausted after a deploy reduced max connections from 100 to 20.",
+    "Connection pool metrics show saturation at 20/20 starting 14:03 UTC.",
+    "Error logs show 'connection pool exhausted' first at 14:04 UTC.",
+    "The config diff for the 14:00 UTC deploy shows max_connections changed from 100 to 20.",
+    "Checkout success rate dropped from 99.2% to 61% between 14:03 and 14:47 UTC.",
+    "Approximately 8,400 checkout attempts failed during the incident window.",
+    "Downstream payment-service saw a 3x retry-storm from checkout-service.",
+    "14:00 UTC: deploy of checkout-service v2.14.0 begins.",
+    "14:03 UTC: connection pool saturation begins.",
+    "14:47 UTC: rollback to v2.13.2 completes and pool saturation clears.",
+    "checkout-service depends on payment-service for authorization.",
+    "checkout-service depends on inventory-service for stock holds.",
+    "On-call rolled back checkout-service to v2.13.2 at 14:44 UTC.",
+    "max_connections was restored to 100 in the rollback.",
+    "The same max_connections misconfiguration caused a smaller incident on a staging deploy two weeks earlier.",
+    "Restore max_connections to a value load-tested for peak traffic, and add a pre-deploy config diff check for connection-pool settings.",
+    "Re-run peak-traffic load test against the restored config, and add an alert on connection-pool saturation above 90% for two release cycles."
+  ],
+  "ground_truth_sections": {
+    "root_cause": "The checkout-service database connection pool was exhausted after a deploy reduced max connections from 100 to 20.",
+    "evidence": "Connection pool metrics show saturation at 20/20 starting 14:03 UTC. Error logs show 'connection pool exhausted' first at 14:04 UTC. The config diff for the 14:00 UTC deploy shows max_connections changed from 100 to 20.",
+    "impact": "Checkout success rate dropped from 99.2% to 61% between 14:03 and 14:47 UTC. Approximately 8,400 checkout attempts failed during the incident window. Downstream payment-service saw a 3x retry-storm from checkout-service.",
+    "fix": "Restore max_connections to a value load-tested for peak traffic, and add a pre-deploy config diff check for connection-pool settings.",
+    "verification_plan": "Re-run peak-traffic load test against the restored config, and add an alert on connection-pool saturation above 90% for two release cycles."
+  }
+}

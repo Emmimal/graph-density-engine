@@ -1,0 +1,66 @@
+{
+  "scenario_id": "incident_02",
+  "theme": "cache stampede after TTL misconfiguration",
+  "service": "product-catalog-service",
+  "per_agent_knowledge": {
+    "0": [
+      "product-catalog-service depends on the shared Redis cluster.",
+      "Database read replicas fell behind primary by up to 40 seconds.",
+      "Cache hit rate dropped from 97% to 4% within a 90-second window at 09:15 UTC."
+    ],
+    "1": [
+      "On-call manually triggered the cache warm-up script at 09:30 UTC.",
+      "search-service depends on product-catalog-service for freshness."
+    ],
+    "2": [
+      "The cache TTL config was set to a fixed absolute timestamp instead of a relative duration in the 09:00 UTC deploy.",
+      "Primary database CPU spiked to 98% at 09:16 UTC."
+    ],
+    "3": [
+      "A cache TTL misconfiguration caused all product-catalog cache entries to expire simultaneously, triggering a cache stampede against the primary database.",
+      "Switch cache TTLs to jittered relative durations and copy the pricing-service TTL-jitter fix into the shared config template."
+    ],
+    "4": [
+      "A near-identical TTL misconfiguration was fixed in the pricing-service six months prior; the fix was not applied to product-catalog-service's config template.",
+      "09:15 UTC: mass cache expiry begins."
+    ],
+    "5": [
+      "Product page load latency (p95) rose from 220ms to 4.8s.",
+      "Verify TTL jitter is present in the shared config template used by all services, and load-test a simulated mass-expiry scenario in staging."
+    ],
+    "6": [
+      "09:00 UTC: cache-config deploy goes out.",
+      "Database read replicas were temporarily scaled from 3 to 6 nodes."
+    ],
+    "7": [
+      "09:37 UTC: cache warm-up script restores hit rate above 90%.",
+      "Search-service, which reads from product-catalog-service, returned stale results for 22 minutes."
+    ]
+  },
+  "expected_facts": [
+    "A cache TTL misconfiguration caused all product-catalog cache entries to expire simultaneously, triggering a cache stampede against the primary database.",
+    "Cache hit rate dropped from 97% to 4% within a 90-second window at 09:15 UTC.",
+    "Primary database CPU spiked to 98% at 09:16 UTC.",
+    "The cache TTL config was set to a fixed absolute timestamp instead of a relative duration in the 09:00 UTC deploy.",
+    "Product page load latency (p95) rose from 220ms to 4.8s.",
+    "Database read replicas fell behind primary by up to 40 seconds.",
+    "Search-service, which reads from product-catalog-service, returned stale results for 22 minutes.",
+    "09:00 UTC: cache-config deploy goes out.",
+    "09:15 UTC: mass cache expiry begins.",
+    "09:37 UTC: cache warm-up script restores hit rate above 90%.",
+    "product-catalog-service depends on the shared Redis cluster.",
+    "search-service depends on product-catalog-service for freshness.",
+    "On-call manually triggered the cache warm-up script at 09:30 UTC.",
+    "Database read replicas were temporarily scaled from 3 to 6 nodes.",
+    "A near-identical TTL misconfiguration was fixed in the pricing-service six months prior; the fix was not applied to product-catalog-service's config template.",
+    "Switch cache TTLs to jittered relative durations and copy the pricing-service TTL-jitter fix into the shared config template.",
+    "Verify TTL jitter is present in the shared config template used by all services, and load-test a simulated mass-expiry scenario in staging."
+  ],
+  "ground_truth_sections": {
+    "root_cause": "A cache TTL misconfiguration caused all product-catalog cache entries to expire simultaneously, triggering a cache stampede against the primary database.",
+    "evidence": "Cache hit rate dropped from 97% to 4% within a 90-second window at 09:15 UTC. Primary database CPU spiked to 98% at 09:16 UTC. The cache TTL config was set to a fixed absolute timestamp instead of a relative duration in the 09:00 UTC deploy.",
+    "impact": "Product page load latency (p95) rose from 220ms to 4.8s. Database read replicas fell behind primary by up to 40 seconds. Search-service, which reads from product-catalog-service, returned stale results for 22 minutes.",
+    "fix": "Switch cache TTLs to jittered relative durations and copy the pricing-service TTL-jitter fix into the shared config template.",
+    "verification_plan": "Verify TTL jitter is present in the shared config template used by all services, and load-test a simulated mass-expiry scenario in staging."
+  }
+}
