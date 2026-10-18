@@ -137,6 +137,7 @@ graph-density-engine/
 │   ├── test_tfidf_redundancy.py
 │   └── test_reproducibility.py
 ├── run_phase1.py, run_phase2.py
+├── phase2_results.json
 ├── experiment.md                                # Frozen pre-registration protocol
 ├── interfaces.md                                # Frozen interface contracts
 ├── README.md
